@@ -65,8 +65,10 @@ public class DataUtilitiesTest {
 	} */
 	  // Method to test calculateColumnTotal method and print results
    
+	
+	//POSITIVE COLUMNS
 	@Test
-	public void testCalculateColumnTotal_Case1StandardInput() {
+	public void testCalculateColumnTotal_Case1StandardInputPositiveColumns() {
 	    // Test Case 1: Regular matrix
 	    data.addValue(1, 2, 3);
 	    data.addValue(4, 5, 6);
@@ -75,31 +77,7 @@ public class DataUtilitiesTest {
 	    assertEquals(expectedOutcome, DataUtilities.calculateColumnTotal(values2D, column), 0.0001);
 	}
 	@Test
-	public void testCalculateColumnTotal_Case2Negative() {
-	    data.addValue(-1, 2, 3);
-	    data.addValue(4, 5, 6);
-	    int column = 0;
-	    double expectedOutcome = 3; //4+-1 =3
-	    assertEquals(expectedOutcome, DataUtilities.calculateColumnTotal(values2D, column), 0.0001);
-	}
-	@Test
-	public void testCalculateColumnTotal_OutOfBoundsPositive() {
-	    data.addValue(1, 2, 3);
-	    data.addValue(4, 5, 6);
-	    int column = 7;
-	    
-	    try {
-	        DataUtilities.calculateColumnTotal(values2D, column);
-	        
-	        fail("Expected an IndexOutOfBoundsException to be thrown");
-	    } catch (IndexOutOfBoundsException e) {
-	     
-	       assertEquals("Index 7 out of bounds for length 2", e.getMessage());
-	    }
-	 
-	}
-	@Test
-	public void testCalculateColumnTotal_OutOfBoundsNegatives() {
+	public void testCalculateColumnTotal_Case2OutOfBoundsNegativesPositiveColumns() {
 	    data.addValue(1, 2, 3);
 	    data.addValue(4, 5, 6);
 	    int column = -1; 
@@ -116,29 +94,81 @@ public class DataUtilitiesTest {
 	}
 
 	
-	//TEST calculateRowTotal
 	@Test
-	public void testCalculateRowTotal_Case1() {
+	public void testCalculateColumnTotal_Case3OutOfBoundsPositivePositiveColumns() {
+	    data.addValue(1, 2, 3);
+	    data.addValue(4, 5, 6);
+	    int column = 7;
+	    
+	    try {
+	        DataUtilities.calculateColumnTotal(values2D, column);
+	        
+	        fail("Expected an IndexOutOfBoundsException to be thrown");
+	    } catch (IndexOutOfBoundsException e) {
+	     
+	       assertEquals("Index 7 out of bounds for length 2", e.getMessage());
+	    }
+	 
+	}
+	
+	////NEGATIVE COLUMNS
+	@Test
+	public void testCalculateColumnTotal_Case4StandardInputNegativeColumns() {
+	    data.addValue(-1, 2, 3);
+	    data.addValue(4, 5, 6);
+	    int column = 0;
+	    double expectedOutcome = 3; //4+-1 =3
+	    assertEquals(expectedOutcome, DataUtilities.calculateColumnTotal(values2D, column), 0.0001);
+	}
+	@Test
+	public void testCalculateColumnTotal_Case5OutOfBoundsNegativesNegativeColumns() {
+	    data.addValue(-1, 2, 3);
+	    data.addValue(4, 5, 6);
+	    int column = -1; 
+
+	    
+	    try {
+	        DataUtilities.calculateColumnTotal(values2D, column);
+	       
+	        fail("Expected an IndexOutOfBoundsException to be thrown");
+	    } catch (IndexOutOfBoundsException e) {
+	     
+	       assertEquals("Index -1 out of bounds for length 2", e.getMessage());
+	    }
+	}
+	@Test
+	public void testCalculateColumnTotal_Case6OutOfBoundsPositiveNegativeColumns() {
+	    data.addValue(-1, 2, 3);
+	    data.addValue(4, 5, 6);
+	    int column = 7;
+	    
+	    try {
+	        DataUtilities.calculateColumnTotal(values2D, column);
+	        
+	        fail("Expected an IndexOutOfBoundsException to be thrown");
+	    } catch (IndexOutOfBoundsException e) {
+	     
+	       assertEquals("Index 7 out of bounds for length 2", e.getMessage());
+	    }
+	 
+	}
+
+	
+	//TEST calculateRowTotal
+	//POSITIVE ROWS
+	@Test
+	public void testCalculateRowTotal_Case1StandardInputPositiveColumns() {
 	    data.addValue(1, 2, 3);
 	    data.addValue(4, 5, 6);
 	    int column = 1;
 	    double expectedOutcome = 15; //4+5+6 =15
 	    assertEquals(expectedOutcome, DataUtilities.calculateRowTotal(values2D, column), 0.0001);
 	}
-	
 	@Test
-	public void testCalculateRowTotal_Case2NegativeValue() {
-	    data.addValue(1, 2, 3);
-	    data.addValue(4, -5, 6);
-	    int column = 1;
-	    double expectedOutcome = 7; //4+-5+6 =7
-	    assertEquals(expectedOutcome, DataUtilities.calculateRowTotal(values2D, column), 0.0001);
-	}
-	@Test
-	public void testCalculateRowTotal_Case3OutOfBoundsPositive() {
+	public void testCalculateRowTotal_Case2OutOfBoundsPositivePositiveColumns() {
 	    data.addValue(1, 2, 3);
 	    data.addValue(4, 5, 6);
-	    data.addValue(4, 5, 6);
+
 	    int column = 7; // Index out of bounds
 
 	    
@@ -151,10 +181,10 @@ public class DataUtilitiesTest {
 	    }
 	}
 	@Test
-	public void testCalculateRowTotal_Case3OutOfBoundsNegative() {
+	public void testCalculateRowTotal_Case3OutOfBoundsNegativePositiveColumns() {
 	    data.addValue(1, 2, 3);
 	    data.addValue(4, 5, 6);
-	    data.addValue(4, 5, 6);
+	    
 	    int column = -1; // Negative index, out of bounds
 
 	    
@@ -166,6 +196,53 @@ public class DataUtilitiesTest {
 	        assertEquals("Index -1 out of bounds for length 2", e.getMessage());
 	    }
 	}
+	
+	//NEGATIVE ROWS
+	
+	@Test
+	public void testCalculateRowTotal_Case4NegativeValue() {
+	    data.addValue(1, 2, 3);
+	    data.addValue(4, -5, 6);
+	    int column = 1;
+	    double expectedOutcome = 7; //4+-5+6 =7
+	    assertEquals(expectedOutcome, DataUtilities.calculateRowTotal(values2D, column), 0.0001);
+	}
+	
+	@Test
+	public void testCalculateRowTotal_Case5OutOfBoundsNegativeNegativeRows() {
+	    data.addValue(1, 2, 3);
+	    data.addValue(4, -5, 6);
+	    
+	    int column = -1; // Negative index, out of bounds
+
+	    
+	    try {
+	        DataUtilities.calculateRowTotal(values2D, column);
+	       
+	        fail("Expected an IndexOutOfBoundsException to be thrown");
+	    } catch (IndexOutOfBoundsException e) {
+	        assertEquals("Index -1 out of bounds for length 2", e.getMessage());
+	    }
+	}
+	
+	@Test
+	public void testCalculateRowTotal_Case6OutOfBoundsPositiveNegativeRows() {
+	    data.addValue(1, 2, 3);
+	    data.addValue(4, -5, 6);
+
+	    int column = 7; // Index out of bounds
+
+	    
+	    try {
+	        DataUtilities.calculateRowTotal(values2D, column);
+	        
+	        fail("Expected an IndexOutOfBoundsException to be thrown");
+	    } catch (IndexOutOfBoundsException e) {
+	    	assertEquals("Index 7 out of bounds for length 2", e.getMessage());
+	    }
+	}
+
+
 
 	
 //Testing createNumberArray
