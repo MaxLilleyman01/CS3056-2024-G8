@@ -230,12 +230,12 @@ public class RangeTest {
         } catch (IllegalArgumentException e) {
             fail("Unexpected IllegalArgumentException caught:" + e);
         }
-		assertEquals("ExpandToInclude: Failed to not change when a value already contained in range is entered", 
+		assertEquals("ExpandToInclude: Failed to keep Range the same when value is inside Range", 
 				expected, actual);
 	}
 	
 	@Test
-	public void testExpandToIncludeValueOutsideRange() {
+	public void testExpandToIncludeValueInsideRangeWithOneNegative() {
 		Range range = new Range(-2, 6);
 		double number = 4;
 		Range expected = new Range(-2, 6);
@@ -245,7 +245,67 @@ public class RangeTest {
         } catch (IllegalArgumentException e) {
             fail("Unexpected IllegalArgumentException caught:" + e);
         }
-		assertEquals("ExpandToInclude: Failed to expand to include valid double outside it's current range", 
+		assertEquals("ExpandToInclude: Failed to not change when a value already contained in Range is entered and one boundary is negative", 
+				expected, actual);
+	}
+	
+	@Test
+	public void testExpandToIncludeValueInsideRangeWhereBothNegative() {
+		Range range = new Range(-6, -2);
+		double number = -4;
+		Range expected = new Range(-6, -2);
+		Range actual = null;
+        try {
+            actual = Range.expandToInclude(range, number);
+        } catch (IllegalArgumentException e) {
+            fail("Unexpected IllegalArgumentException caught:" + e);
+        }
+		assertEquals("ExpandToInclude: Failed to not change when a value already contained in Range is entered and all values are negative", 
+				expected, actual);
+	}
+	
+	@Test
+	public void testExpandToIncludeValueGreaterThanRange() {
+		Range range = new Range(2, 6);
+		double number = 10;
+		Range expected = new Range(2, 10);
+		Range actual = null;
+        try {
+            actual = Range.expandToInclude(range, number);
+        } catch (IllegalArgumentException e) {
+            fail("Unexpected IllegalArgumentException caught:" + e);
+        }
+		assertEquals("ExpandToInclude: Failed to not expand to include range above boundary", 
+				expected, actual);
+	}
+	
+	@Test
+	public void testExpandToIncludeValueGreaterThanRangeWithOneNegativeBoundary() {
+		Range range = new Range(-2, 6);
+		double number = 10;
+		Range expected = new Range(-2, 10);
+		Range actual = null;
+        try {
+            actual = Range.expandToInclude(range, number);
+        } catch (IllegalArgumentException e) {
+            fail("Unexpected IllegalArgumentException caught:" + e);
+        }
+		assertEquals("ExpandToInclude: Failed to expand to include Range above boundary when one boundary is negative", 
+				expected, actual);
+	}
+	
+	@Test
+	public void testExpandToIncludeValueGreaterThanRangeWhenBothBoundariesNegative() {
+		Range range = new Range(-6, -2);
+		double number = 10;
+		Range expected = new Range(-6, 10);
+		Range actual = null;
+        try {
+            actual = Range.expandToInclude(range, number);
+        } catch (IllegalArgumentException e) {
+            fail("Unexpected IllegalArgumentException caught:" + e);
+        }
+		assertEquals("ExpandToInclude: Failed to expand to include Range above boundary when both boundaries are negative", 
 				expected, actual);
 	}
 	
@@ -260,12 +320,72 @@ public class RangeTest {
         } catch (IllegalArgumentException e) {
             fail("Unexpected IllegalArgumentException caught:" + e);
         }
-		assertEquals("ExpandToInclude: Failed to expand to include value below lower range", 
+		assertEquals("ExpandToInclude: Failed to expand to include value below lower Range", 
+				expected, actual);
+	}
+	
+	@Test
+	public void testExpandToIncludeValueBelowLowerRangeWithOneNegative() {
+		Range range = new Range(-2, 6);
+		double number = -3;
+		Range expected = new Range(-3, 6);
+		Range actual = null;
+        try {
+            actual = Range.expandToInclude(range, number);
+        } catch (IllegalArgumentException e) {
+            fail("Unexpected IllegalArgumentException caught:" + e);
+        }
+		assertEquals("ExpandToInclude: Failed to expand to include value below lower Range when one boundary is negative", 
+				expected, actual);
+	}
+	
+	@Test
+	public void testExpandToIncludeValueBelowLowerRangeWhereBothNegative() {
+		Range range = new Range(-6, -2);
+		double number = -7;
+		Range expected = new Range(-7, -2);
+		Range actual = null;
+        try {
+            actual = Range.expandToInclude(range, number);
+        } catch (IllegalArgumentException e) {
+            fail("Unexpected IllegalArgumentException caught:" + e);
+        }
+		assertEquals("ExpandToInclude: Failed to expand to include value below lower Range when both boundaries are negative", 
 				expected, actual);
 	}
 	
 	@Test
 	public void testExpandToIncludeWithNegativeValues() {
+		Range range = new Range(2, 6);
+		double number = -8;
+		Range expected = new Range(-8, 6);
+		Range actual = null;
+        try {
+            actual = Range.expandToInclude(range, number);
+        } catch (IllegalArgumentException e) {
+            fail("Unexpected IllegalArgumentException caught:" + e);
+        }
+		assertEquals("ExpandToInclude: Failed to expand the Range to include a negative value",
+				expected, actual);
+	}
+	
+	@Test
+	public void testExpandToIncludeWithNegativeValuesWhereRangeHasOneNegative() {
+		Range range = new Range(-2, 6);
+		double number = -8;
+		Range expected = new Range(-8, 6);
+		Range actual = null;
+        try {
+            actual = Range.expandToInclude(range, number);
+        } catch (IllegalArgumentException e) {
+            fail("Unexpected IllegalArgumentException caught:" + e);
+        }
+		assertEquals("ExpandToInclude: Failed to expand the Range to include a negative value when one boundary is negative",
+				expected, actual);
+	}
+	
+	@Test
+	public void testExpandToIncludeWithNegativeValuesWhereRangeIsNegative() {
 		Range range = new Range(-6, -2);
 		double number = -8;
 		Range expected = new Range(-8, -2);
@@ -275,7 +395,7 @@ public class RangeTest {
         } catch (IllegalArgumentException e) {
             fail("Unexpected IllegalArgumentException caught:" + e);
         }
-		assertEquals("ExpandToInclude: Failed to keep Range the same when value is the upper boundary and range includes a negative",
+		assertEquals("ExpandToInclude: Failed to expand the Range to include a negative value when both boundaries are negative",
 				expected, actual);
 	}
 	
@@ -295,6 +415,36 @@ public class RangeTest {
 	}
 	
 	@Test
+	public void testExpandToIncludeValueOnLowerBoundaryWithOneNegative() {
+		Range range = new Range(-2, 6);
+		double number = -2;
+		Range expected = new Range(-2, 6);
+		Range actual = null;
+        try {
+            actual = Range.expandToInclude(range, number);
+        } catch (IllegalArgumentException e) {
+            fail("Unexpected IllegalArgumentException caught:" + e);
+        }
+		assertEquals("ExpandToInclude: Failed to keep Range the same when a value on the lower boundary is used and it is negative",
+				expected, actual);
+	}
+	
+	@Test
+	public void testExpandToIncludeValueOnLowerBoundaryWhereBothNegative() {
+		Range range = new Range(-6, -2);
+		double number = -6;
+		Range expected = new Range(-6, -2);
+		Range actual = null;
+        try {
+            actual = Range.expandToInclude(range, number);
+        } catch (IllegalArgumentException e) {
+            fail("Unexpected IllegalArgumentException caught:" + e);
+        }
+		assertEquals("ExpandToInclude: Failed to keep Range the same when a value on the lower boundary is used and both boundaries are negative",
+				expected, actual);
+	}
+	
+	@Test
 	public void testExpandToIncludeValueOnUpperBoundary() {
 		Range range = new Range(2, 6);
 		double number = 6;
@@ -310,7 +460,37 @@ public class RangeTest {
 	}
 	
 	@Test
-	public void testConstrainValueInsideStandardRange() {
+	public void testExpandToIncludeValueOnUpperBoundaryWithOneNegative() {
+		Range range = new Range(-2, 6);
+		double number = 6;
+		Range expected = new Range(-2, 6);
+		Range actual = null;
+        try {
+            actual = Range.expandToInclude(range, number);
+        } catch (IllegalArgumentException e) {
+            fail("Unexpected IllegalArgumentException caught:" + e);
+        }
+		assertEquals("ExpandToInclude: Failed to keep Range the same when a value on the upper boundary is used and one boundary is negative",
+				expected, actual);
+	}
+	
+	@Test
+	public void testExpandToIncludeValueOnUpperBoundaryWhereBothNegative() {
+		Range range = new Range(-6, -2);
+		double number = -2;
+		Range expected = new Range(-6, -2);
+		Range actual = null;
+        try {
+            actual = Range.expandToInclude(range, number);
+        } catch (IllegalArgumentException e) {
+            fail("Unexpected IllegalArgumentException caught:" + e);
+        }
+		assertEquals("ExpandToInclude: Failed to keep Range the same when a value on the upper boundary is used and both boundaries are negative",
+				expected, actual);
+	}
+	
+	@Test
+	public void testConstrainValueInsideRange() {
 	    Range range = new Range(2, 6);
 	    double number = 4;
 	    double actual = range.constrain(number);
@@ -318,7 +498,57 @@ public class RangeTest {
 	    assertEquals("Constrain: Failed to return closest double when double is inside range",
 	            expected, actual, 0.0001);
 	}
+	
+	@Test
+	public void testConstrainValueInsideRangeWithOneNegativeBoundary() {
+	    Range range = new Range(-2, 6);
+	    double number = 4;
+	    double actual = range.constrain(number);
+	    double expected = 4;
+	    assertEquals("Constrain: Failed to return closest double when double is inside Range and one boundary is negative",
+	            expected, actual, 0.0001);
+	}
+	
+	@Test
+	public void testConstrainValueInsideRangeWhereBothBoundariesNegative() {
+	    Range range = new Range(-6, -2);
+	    double number = -4;
+	    double actual = range.constrain(number);
+	    double expected = -4;
+	    assertEquals("Constrain: Failed to return closest double when double is inside Range and both boundaries are negative",
+	            expected, actual, 0.0001);
+	}
+	
+	@Test
+	public void testConstrainValueAboveUpperRange() {
+	    Range range = new Range(2, 6);
+	    double number = 10;
+	    double actual = range.constrain(number);
+	    double expected = 6;
+	    assertEquals("Constrain: Failed to return closest double when double is above upper range",
+	            expected, actual, 0.0001);
+	}
 
+	@Test
+	public void testConstrainValueAboveUpperRangeWithOneNegativeBoundary() {
+	    Range range = new Range(-2, 6);
+	    double number = 10;
+	    double actual = range.constrain(number);
+	    double expected = 6;
+	    assertEquals("Constrain: Failed to return closest double when double is above upper Range and one boundary is negative",
+	            expected, actual, 0.0001);
+	}
+	
+	@Test
+	public void testConstrainValueAboveUpperRangeWhereBothBoundariesNegative() {
+	    Range range = new Range(-6, -2);
+	    double number = 10;
+	    double actual = range.constrain(number);
+	    double expected = -2;
+	    assertEquals("Constrain: Failed to return closest double when double is above upper Range and both boundaries are negative",
+	            expected, actual, 0.0001);
+	}
+	
 	@Test
 	public void testConstrainValueBelowLowerBoundary() {
 	    Range range = new Range(2, 6);
@@ -330,14 +560,55 @@ public class RangeTest {
 	}
 	
 	@Test
-	public void testConstrainValueAboveUpperRange() {
-	    Range range = new Range(2, 6);
-	    double number = 8;
+	public void testConstrainValueBelowLowerBoundaryWithOneNegativeBoundary() {
+	    Range range = new Range(-2, 6);
+	    double number = -3;
 	    double actual = range.constrain(number);
-	    double expected = 6;
-	    assertEquals("Constrain: Failed to return closest double when double is above upper range",
+	    double expected = -3;
+	    assertEquals("Constrain: Failed to return closest double when double was lower than lower bound and one boundary is negative",
 	            expected, actual, 0.0001);
 	}
+	
+	@Test
+	public void testConstrainValueBelowLowerBoundaryWhereBothBoundariesNegative() {
+	    Range range = new Range(-6, -2);
+	    double number = -7;
+	    double actual = range.constrain(number);
+	    double expected = -7;
+	    assertEquals("Constrain: Failed to return closest double when double was lower than lower bound and both boundaries are negative",
+	            expected, actual, 0.0001);
+	}
+	
+	@Test
+	public void testConstrainValueIsNegative() {
+	    Range range = new Range(2, 6);
+	    double number = -8;
+	    double actual = range.constrain(number);
+	    double expected = 2;
+	    assertEquals("Constrain: Failed to return closest double when double was negative",
+	            expected, actual, 0.0001);
+	}
+	
+	@Test
+	public void testConstrainValueIsNegativeWithOneNegativeBoundary() {
+	    Range range = new Range(-2, 6);
+	    double number = -8;
+	    double actual = range.constrain(number);
+	    double expected = -2;
+	    assertEquals("Constrain: Failed to return closest double when double was negative and one boundary is negative",
+	            expected, actual, 0.0001);
+	}
+	
+	@Test
+	public void testConstrainValueIsNegativeWithNegativeBoundaries() {
+	    Range range = new Range(-6, -2);
+	    double number = -8;
+	    double actual = range.constrain(number);
+	    double expected = -6;
+	    assertEquals("Constrain: Failed to return closest double when double was negative and both boundaries are negative",
+	            expected, actual, 0.0001);
+	}
+	
 	
 	@Test
 	public void testConstrainValueMatchesLowerBoundary() {
@@ -350,22 +621,52 @@ public class RangeTest {
 	}
 	
 	@Test
-	public void testConstrainValuematchesUpperBoundary() {
-	    Range range = new Range(-6, -2);
+	public void testConstrainValueMatchesLowerBoundaryWithOneNegative() {
+	    Range range = new Range(-2, 6);
 	    double number = -2;
 	    double actual = range.constrain(number);
 	    double expected = -2;
-	    assertEquals("Constrain: Failed to return closest double when double equals upper boundary",
+	    assertEquals("Constrain: Failed to return closest double when double equals lower boundary and one boundary is negative",
 	            expected, actual, 0.0001);
 	}
 	
 	@Test
-	public void testConstrainValueIsNegative() {
+	public void testConstrainValueMatchesLowerBoundaryWithNegativeBoundaries() {
+	    Range range = new Range(-6, -2);
+	    double number = -6;
+	    double actual = range.constrain(number);
+	    double expected = -6;
+	    assertEquals("Constrain: Failed to return closest double when double equals lower boundary and both boundaries are negative",
+	            expected, actual, 0.0001);
+	}
+	
+	@Test
+	public void testConstrainValuematchesUpperBoundary() {
+	    Range range = new Range(2, 6);
+	    double number = 6;
+	    double actual = range.constrain(number);
+	    double expected = 6;
+	    assertEquals("Constrain: Failed to return closest double when double equals upper boundary",
+	            expected, actual, 0.0001);
+	}
+
+	@Test
+	public void testConstrainValuematchesUpperBoundaryWithOneNegative() {
 	    Range range = new Range(-2, 6);
-	    double number = -4;
+	    double number = 6;
+	    double actual = range.constrain(number);
+	    double expected = 6;
+	    assertEquals("Constrain: Failed to return closest double when double equals upper boundary and one boundary is negative",
+	            expected, actual, 0.0001);
+	}
+
+	@Test
+	public void testConstrainValuematchesUpperBoundaryWhereBothBoundariesNegative() {
+	    Range range = new Range(-6, -2);
+	    double number = -2;
 	    double actual = range.constrain(number);
 	    double expected = -2;
-	    assertEquals("Constrain: Failed to return closest double when double was negative",
+	    assertEquals("Constrain: Failed to return closest double when double equals upper boundary and both boundaries are negative",
 	            expected, actual, 0.0001);
 	}
 }
